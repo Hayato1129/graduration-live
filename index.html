@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 卒業ライブ🌟ゴーゴーレツゴーゴゴゴーゴゴーゴ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Outfit:wght@700;900&display=swap"
+        rel="stylesheet">
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        display: ['"Outfit"', '"Noto Sans JP"', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            900: '#0B0D17',
+                            800: '#161A30',
+                            700: '#222831',
+                        },
+                        star: {
+                            glow: '#FFE382',
+                            accent: '#FFB800'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'fade-out': 'fadeOut 0.5s ease-out forwards',
+                        // カード独自の浮遊アニメーション
+                        'card-float': 'cardFloat 4s ease-in-out infinite',
+                        // キラキラアニメーション
+                        'shine': 'shine 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1' },
+                            '100%': { opacity: '0', pointerEvents: 'none' },
+                        },
+                        cardFloat: {
+                            '0%, 100%': { transform: 'translateY(0) rotateX(5deg) rotateY(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotateX(10deg) rotateY(5deg)' },
+                        },
+                        shine: {
+                            '0%, 100%': { opacity: 0.3, transform: 'translateX(-100%) skew(-20deg)' },
+                            '50%': { opacity: 0.8, transform: 'translateX(200%) skew(-20deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 227, 130, 0.5);
+        }
+
+        .bg-stars {
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+        }
+
+        /* 3D Flip Utilities */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Hologram specific styles */
+        .holo-overlay {
+            background: linear-gradient(125deg,
+                    rgba(255, 0, 0, 0.1) 0%,
+                    rgba(255, 154, 0, 0.2) 10%,
+                    rgba(208, 222, 33, 0.3) 20%,
+                    rgba(79, 220, 74, 0.4) 30%,
+                    rgba(63, 218, 216, 0.3) 40%,
+                    rgba(47, 201, 226, 0.2) 50%,
+                    rgba(28, 127, 238, 0.3) 60%,
+                    rgba(95, 21, 242, 0.4) 70%,
+                    rgba(186, 12, 248, 0.3) 80%,
+                    rgba(251, 7, 217, 0.2) 90%,
+                    rgba(255, 0, 0, 0.1) 100%);
+            mix-blend-mode: color-dodge;
+            opacity: 0.6;
+        }
+
+        /* Custom scrollbar for form */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 184, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 184, 0, 0.8);
+        }
+
+        /* ===== カードサイズ管理: 固定300x420px + 全画面でscale縮小/拡大 ===== */
+        #tcg-card {
+            width: 300px;
+            height: 420px;
+        }
+
+        /* カード全体を画像のように等比率でスケーリング（PC/スマホ共通） */
+        #card-scale-wrapper {
+            transform: scale(var(--card-scale, 1));
+            transform-origin: top center;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-space-900 bg-stars text-slate-200 font-sans antialiased selection:bg-star-accent selection:text-space-900 relative">
+
+    <!-- 全画面受付フォーム (アクセス時に最初に表示される) -->
+    <div id="reception-overlay"
+        class="fixed inset-0 z-50 bg-space-900/95 backdrop-blur-md flex items-center justify-center overflow-y-auto transition-opacity duration-500">
+        <div id="form-glass-container"
+            class="glass w-full max-w-lg rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden animate-fade-in shadow-[0_0_50px_rgba(0,0,0,0.5)] border-star-accent/20 transition-all duration-500 m-auto">
+            <!-- 飾りの光 -->
+            <div
+                class="absolute -top-24 -right-24 w-48 h-48 bg-star-accent/20 blur-[60px] rounded-full pointer-events-none">
+            </div>
+            <div
+                class="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/20 blur-[60px] rounded-full pointer-events-none">
+            </div>
+
+            <div class="text-center mb-4 sm:mb-10 relative z-10">
+                <span class="text-star-accent text-xs sm:text-sm font-bold tracking-widest mb-1 sm:mb-2 block">WELCOME
+                    TO</span>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-display font-black text-white mb-1 sm:mb-2 text-glow">
+                    来場者受付</h2>
+                <p class="text-slate-400 text-[10px] sm:text-sm">入場前に以下のフォームにご回答ください</p>
+            </div>
+
+            <form id="reception-form" class="space-y-4 sm:space-y-6 relative z-10 transition-all duration-500">
+                <!-- 区分選択（クリックで展開） -->
+                <div class="space-y-1.5 sm:space-y-3">
+                    <label class="block text-xs sm:text-sm font-bold text-slate-200">あなたの区分を選んでください <span
+                            class="text-star-accent">*</span></label>
+                    <div class="grid grid-cols-1 gap-2 sm:gap-3">
+
+                        <!-- アメ研現役ボタン -->
+                        <div>
+                            <label
+                                class="relative flex items-center cursor-pointer py-2 px-3 sm:p-4 rounded-xl border border-slate-600 bg-space-800 hover:border-star-accent transition-all group">
+                                <input type="radio" name="affiliation" value="current" class="peer sr-only" required
+                                    onchange="toggleCategory(this.value)">
+                                <div
+                                    class="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-slate-400 peer-checked:border-star-accent peer-checked:bg-star-accent flex items-center justify-center mr-2 sm:mr-3 transition-all flex-shrink-0">
+                                    <div
+                                        class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-space-900 opacity-0 peer-checked:opacity-100 transition-all">
+                                    </div>
+                                </div>
+                                <span
+                                    class="font-medium text-sm sm:text-base text-slate-300 peer-checked:text-white transition-colors">アメ研現役</span>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-star-accent to-transparent opacity-0 peer-checked:opacity-100 transition-all">
+                                </div>
+                            </label>
+                            <!-- アメ研現役用の展開フィールド -->
+                            <div id="fields-current"
+                                class="hidden mt-2 p-3 sm:p-4 rounded-xl bg-space-800/50 border border-slate-700/50 space-y-3 sm:space-y-4 animate-fade-in">
+                                <div class="space-y-1.5">
+                                    <label for="gen-current"
+                                        class="block text-xs sm:text-sm font-bold text-slate-200">何代目ですか？ <span
+                                            class="text-star-accent">*</span></label>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" id="gen-current" name="generation" placeholder="例: 10"
+                                            min="1"
+                                            class="w-20 sm:w-24 bg-space-900 border border-slate-600 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-star-accent focus:border-transparent transition-all">
+                                        <span class="text-slate-400 font-medium text-sm sm:text-base">代</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label for="name-current"
+                                        class="block text-xs sm:text-sm font-bold text-slate-200">お名前 <span
+                                            class="text-star-accent">*</span></label>
+                                    <input type="text" id="name-current" name="name" placeholder="アメ研での呼び名"
+                                        class="w-full bg-space-900 border border-slate-600 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-star-accent focus:border-transparent transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- アメ研OB・OGボタン -->
+                        <div>
+                            <label
+                                class="relative flex items-center cursor-pointer py-2 px-3 sm:p-4 rounded-xl border border-slate-600 bg-space-800 hover:border-star-accent transition-all group">
+                                <input type="radio" name="affiliation" value="obog" class="peer sr-only" required
+                                    onchange="toggleCategory(this.value)">
+                                <div
+                                    class="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-slate-400 peer-checked:border-star-accent peer-checked:bg-star-accent flex items-center justify-center mr-2 sm:mr-3 transition-all flex-shrink-0">
+                                    <div
+                                        class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-space-900 opacity-0 peer-checked:opacity-100 transition-all">
+                                    </div>
+                                </div>
+                                <span
+                                    class="font-medium text-sm sm:text-base text-slate-300 peer-checked:text-white transition-colors">アメ研OB・OG</span>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-star-accent to-transparent opacity-0 peer-checked:opacity-100 transition-all">
+                                </div>
+                            </label>
+                            <!-- OB・OG用の展開フィールド -->
+                            <div id="fields-obog"
+                                class="hidden mt-2 p-3 sm:p-4 rounded-xl bg-space-800/50 border border-slate-700/50 space-y-3 sm:space-y-4 animate-fade-in">
+                                <div class="space-y-1.5">
+                                    <label for="gen-obog"
+                                        class="block text-xs sm:text-sm font-bold text-slate-200">何代目ですか？ <span
+                                            class="text-star-accent">*</span></label>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" id="gen-obog" name="generation" placeholder="例: 10" min="1"
+                                            class="w-20 sm:w-24 bg-space-900 border border-slate-600 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-star-accent focus:border-transparent transition-all">
+                                        <span class="text-slate-400 font-medium text-sm sm:text-base">代</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label for="name-obog" class="block text-xs sm:text-sm font-bold text-slate-200">お名前
+                                        <span class="text-star-accent">*</span></label>
+                                    <input type="text" id="name-obog" name="name" placeholder="アメ研での呼び名"
+                                        class="w-full bg-space-900 border border-slate-600 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-star-accent focus:border-transparent transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- それ以外の方ボタン -->
+                        <div>
+                            <label
+                                class="relative flex items-center cursor-pointer py-2 px-3 sm:p-4 rounded-xl border border-slate-600 bg-space-800 hover:border-star-accent transition-all group">
+                                <input type="radio" name="affiliation" value="other" class="peer sr-only" required
+                                    onchange="toggleCategory(this.value)">
+                                <div
+                                    class="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-slate-400 peer-checked:border-star-accent peer-checked:bg-star-accent flex items-center justify-center mr-2 sm:mr-3 transition-all flex-shrink-0">
+                                    <div
+                                        class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-space-900 opacity-0 peer-checked:opacity-100 transition-all">
+                                    </div>
+                                </div>
+                                <span
+                                    class="font-medium text-sm sm:text-base text-slate-300 peer-checked:text-white transition-colors">それ以外の方</span>
+                                <div
+                                    class="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-star-accent to-transparent opacity-0 peer-checked:opacity-100 transition-all">
+                                </div>
+                            </label>
+                            <!-- それ以外の方は何も展開しない -->
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full mt-4 sm:mt-6 bg-gradient-to-r from-star-accent via-yellow-400 to-star-accent text-space-900 font-black text-base sm:text-lg py-3 sm:py-4 rounded-xl shadow-[0_0_20px_rgba(255,184,0,0.3)] hover:shadow-[0_0_30px_rgba(255,184,0,0.5)] transform hover:-translate-y-1 transition-all duration-300">
+                    回答する ✨
+                </button>
+            </form>
+        </div>
+
+        <!-- フォーム送信後に表示されるカード抽出演出コンテナ (初期非表示) -->
+        <div id="pack-opening-container" class="hidden absolute inset-0 z-20 overflow-y-auto">
+            <!-- 内側ラッパー: 全画面中央配置用 -->
+            <div class="min-h-full w-full flex flex-col items-center justify-center px-4 py-6">
+                <p id="tap-hint"
+                    class="text-star-accent font-bold tracking-widest text-sm animate-pulse text-glow opacity-0 transition-opacity duration-1000 mb-4">
+                    タップしてカードをめくる</p>
+
+                <!-- scale用ラッパー: スマホではこの要素がscale()で縮小される -->
+                <div id="card-scale-wrapper" class="flex items-center justify-center">
+                    <!-- カード全体ラッパー（パースペクティブ用） 固定サイズ300x420px -->
+                    <div class="perspective-1000 cursor-pointer group animate-card-float" id="tcg-card"
+                        onclick="flipCard()">
+                        <!-- カード本体（3D回転する要素） -->
+                        <div id="card-inner"
+                            class="relative w-full h-full preserve-3d transition-transform duration-1000 ease-out shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl">
+
+                            <!-- カード【裏面】 -->
+                            <div
+                                class="absolute inset-0 backface-hidden bg-space-800 rounded-2xl border-4 border-slate-700 flex items-center justify-center overflow-hidden">
+                                <div
+                                    class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-star-accent via-space-800 to-space-900">
+                                </div>
+                                <div
+                                    class="w-24 h-24 border-4 border-star-accent/50 rounded-full flex items-center justify-center rotate-45">
+                                    <div
+                                        class="w-16 h-16 border-2 border-slate-400/50 rounded-full flex items-center justify-center -rotate-45">
+                                        <span class="text-star-accent font-black text-2xl">★</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- カード【表面】 (初期状態は180度裏返っている) -->
+                            <div id="card-front"
+                                class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl border-8 overflow-hidden shadow-inner flex flex-col"
+                                style="border-color: var(--card-border, #fde68a); background: var(--card-bg, linear-gradient(180deg, #fde047 0%, #fbbf24 30%, #fde047 60%, #fbbf24 100%));">
+                                <!-- キラキラエフェクトレイヤー -->
+                                <div
+                                    class="absolute inset-0 opacity-0 pointer-events-none group-[.flipped]:opacity-100 transition-opacity duration-1000 z-10 holo-overlay">
+                                </div>
+                                <div
+                                    class="absolute inset-0 -translate-x-full group-[.flipped]:animate-shine bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20 w-[200%] h-[200%]">
+                                </div>
+
+                                <!-- ヘッダー: バンド名 + 出番情報 -->
+                                <div class="flex justify-between items-center px-3 pt-2 pb-1 relative z-0">
+                                    <span id="card-band-name" class="font-black tracking-tight text-base leading-tight"
+                                        style="color: var(--card-text, #1a1a2e)">バンド名</span>
+                                    <span id="card-slot" class="text-[10px] font-black whitespace-nowrap ml-1"
+                                        style="color: var(--card-text, #1a1a2e)">Day1 1バンド目</span>
+                                </div>
+
+                                <!-- メイン画像（カード高さの55%に制限） -->
+                                <div
+                                    class="h-[55%] bg-space-900 relative mx-2 border-2 border-slate-400/30 rounded-sm shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] overflow-hidden">
+                                    <img id="card-image" src="./yabat_221202.jpg" alt="バンド写真"
+                                        class="w-full h-full object-cover">
+                                </div>
+
+                                <!-- 画像下キャプション（出番時間など） -->
+                                <div class="text-center px-2 py-0.5">
+                                    <span id="card-time" class="text-[9px] font-medium"
+                                        style="color: var(--card-text, #1a1a2e)">17:00～</span>
+                                </div>
+
+                                <!-- 技欄: エネルギーアイコン + コメント -->
+                                <div class="mx-2 border-t border-slate-400/30 px-2 py-1.5 flex items-start gap-2">
+                                    <div class="flex gap-0.5 flex-shrink-0 pt-0.5">
+                                        <div id="card-energy-1"
+                                            class="w-4 h-4 rounded-full border border-white/50 flex items-center justify-center text-[8px] font-black"
+                                            style="background: var(--card-energy, #fbbf24); color: var(--card-text, #1a1a2e)">
+                                            ⚡</div>
+                                    </div>
+                                    <p id="card-message" class="text-[11px] font-bold leading-snug flex-1"
+                                        style="color: var(--card-text, #1a1a2e)">「メッセージ」</p>
+                                </div>
+
+                                <!-- フッター: 結成時期 -->
+                                <div class="mx-2 border-t border-slate-400/30 px-2 py-1 flex justify-between items-center text-[9px]"
+                                    style="color: var(--card-text, #1a1a2e)">
+                                    <span id="card-since" class="font-bold">結成時期：2023/3</span>
+                                    <span class="opacity-60">© アメ研卒業ライブ 2026</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 演出完了後の入場ボタン (初期非表示) -->
+                <button id="enter-site-btn" onclick="enterSite()"
+                    class="opacity-0 pointer-events-none translate-y-4 transition-all duration-700 mt-4 w-3/4 max-w-xs bg-space-900 text-white border border-star-accent font-bold text-base py-3 rounded-full hover:bg-star-accent hover:text-space-900 shadow-[0_0_15px_rgba(255,184,0,0.4)] relative z-30">
+                    入場する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ (初期状態は非表示、またはスクロール不可。オーバーレイの背後に隠れる) -->
+    <!-- フォーム送信後に JavaScript で opacity-100 等に切り替えることも可能だが、今回はオーバーレイ表示中は背面を見せない構造 -->
+    <div id="main-content" class="h-screen overflow-hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+        <!-- 1. トップビジュアル -->
+        <header
+            class="relative min-h-[90vh] flex items-center justify-center flex-col px-4 pt-16 pb-24 overflow-hidden text-center">
+            <!-- Decorative glowing orb -->
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-star-accent/20 rounded-full blur-[80px] pointer-events-none">
+            </div>
+
+            <div class="relative z-10 animate-float">
+                <p class="text-sm md:text-base font-bold text-slate-300 tracking-widest mb-6 leading-relaxed">
+                    ゴーゴーレツゴーゴゴゴーゴゴーゴ<br />
+                    星が通るぜびゅんびゅんびゅん！<br />
+                    目指せみんなの一番星🌟<br />
+                    アメ研と共にあらんことを！！<br />
+                    ファイナルロックスターウォーズ！
+                </p>
+
+                <h1
+                    class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-12 text-glow">
+                    2026年<br class="md:hidden" />卒業ライブ
+                </h1>
+
+                <div
+                    class="glass rounded-2xl p-6 md:p-8 inline-flex flex-col gap-4 border-star-accent/30 shadow-[0_0_30px_rgba(255,184,0,0.1)]">
+                    <div class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6 text-star-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span class="text-xl md:text-2xl font-bold text-white tracking-wider">2026.3.13 - 15</span>
+                    </div>
+                    <div class="h-px bg-gradient-to-r from-transparent via-star-accent/50 to-transparent"></div>
+                    <div class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6 text-star-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-lg md:text-xl font-bold text-white">京都fanJ</span>
+                    </div>
+                </div>
+
+                <div class="mt-16 animate-pulse-slow">
+                    <a href="#movie"
+                        class="text-slate-400 hover:text-star-accent transition-colors duration-300 flex flex-col items-center gap-2">
+                        <span class="text-sm uppercase tracking-widest">Scroll Down</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-4 pb-24 space-y-32">
+
+            <!-- カード再抽選ボタン -->
+            <section class="text-center mb-12">
+                <button onclick="replayCardAnimation()"
+                    class="inline-flex items-center gap-2 glass border border-star-accent/30 hover:border-star-accent text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-star-accent/10 transition-all duration-300 shadow-[0_0_15px_rgba(255,184,0,0.15)]">
+                    <span class="text-lg">✨</span>
+                    もう一度カードを引く
+                </button>
+            </section>
+
+            <!-- 2. 紹介動画セクション -->
+            <section id="movie" class="scroll-mt-24">
+                <h2
+                    class="text-3xl font-display font-bold text-center mb-8 text-white flex items-center justify-center gap-4">
+                    <span class="w-12 h-px bg-gradient-to-r from-transparent to-star-accent"></span>
+                    Teaser Movie
+                    <span class="w-12 h-px bg-gradient-to-l from-transparent to-star-accent"></span>
+                </h2>
+                <div class="glass rounded-2xl p-2 md:p-4 relative group">
+                    <div
+                        class="relative pb-[56.25%] h-0 overflow-hidden rounded-xl bg-space-800 border border-slate-700/50">
+                        <div class="absolute inset-0 flex items-center justify-center flex-col text-slate-500 gap-4">
+                            <svg class="w-16 h-16 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                            </svg>
+                            <span class="font-medium tracking-wide">YouTube Placeholder (iframe)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. タイムテーブルセクション -->
+            <section id="timetable" class="scroll-mt-24">
+                <h2
+                    class="text-3xl font-display font-bold text-center mb-8 text-white flex items-center justify-center gap-4">
+                    <span class="w-12 h-px bg-gradient-to-r from-transparent to-star-accent"></span>
+                    Time Table
+                    <span class="w-12 h-px bg-gradient-to-l from-transparent to-star-accent"></span>
+                </h2>
+                <div class="glass rounded-2xl p-2 md:p-4">
+                    <img src="./260221_タイムテーブル_卒業ライブ.png" alt="タイムテーブル"
+                        class="w-full rounded-xl border border-slate-700/50">
+                </div>
+            </section>
+
+
+        </main>
+
+        <!-- 6. フッター -->
+        <footer class="bg-space-900 border-t border-slate-800 pt-16 pb-8">
+            <div class="max-w-4xl mx-auto px-4 flex flex-col items-center">
+
+                <h3 class="font-display font-bold text-xl mb-8 tracking-widest text-white text-center">FINAL ROCK STAR
+                    WARS<br><span class="text-sm text-star-accent">2026.3.13-15</span></h3>
+
+                <div class="flex gap-6 mb-12">
+                    <!-- Instagram Icon Placeholder -->
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-space-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-star-accent hover:bg-space-700 transition-all duration-300 shadow-sm">
+                        <span class="sr-only">Instagram</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                    <!-- X (Twitter) Icon Placeholder -->
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-space-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-star-accent hover:bg-space-700 transition-all duration-300 shadow-sm">
+                        <span class="sr-only">X (Twitter)</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-500">&copy; 2026 卒業ライブ実行委員会 All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- UI制御用JavaScript + バックエンド連携 -->
+    <script>
+        // ===== Google Apps Script WebアプリのURL（デプロイ後に貼り付け） =====
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwM2rqnPqc2sWt90x9eBs54pmcD2vUVHXOM5zgWzC3eI2DGpHryswJlNBn57S582ZTL-g/exec';
+
+        // バックエンドへフォームデータを送信する関数
+        async function submitToBackend(data) {
+            if (!GAS_API_URL) {
+                console.warn('[Backend] GAS_API_URLが未設定です。デプロイ後にURLを貼り付けてください。');
+                return;
+            }
+            try {
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                console.log('[Backend] 送信成功:', result);
+            } catch (err) {
+                console.error('[Backend] 送信失敗:', err);
+            }
+        }
+
+        // ===== カードデータ配列（サンプル: 実際のバンドデータに差し替えてください） =====
+        // type: タイプカラーを決めるキー (yellow/red/blue/green/purple/pink)
+        const CARD_DATA = [
+            {
+                band: 'ヤバイTシャツ屋さん',
+                type: 'yellow',
+                slot: 'Day1 6バンド目',
+                time: '17:00～',
+                img: './yabat_221202.jpg',
+                msg: '「卒業します！4年間の想いをぶつけます！」',
+                since: '結成時期：2023/3'
+            },
+            {
+                band: 'The Graduates',
+                type: 'red',
+                slot: 'Day2 3バンド目',
+                time: '14:30～',
+                img: './yabat_221202.jpg',
+                msg: '「最高の夜にしような！最後まで楽しんで！」',
+                since: '結成時期：2022/5'
+            },
+            {
+                band: 'STAR DUST',
+                type: 'blue',
+                slot: 'Day3 1バンド目',
+                time: '12:00～',
+                img: './yabat_221202.jpg',
+                msg: '「星になるぜ！」',
+                since: '結成時期：2024/1'
+            },
+            // ここに残りのバンドデータを追加していく
+        ];
+
+        // タイプ別のCSS変数マッピング
+        const TYPE_STYLES = {
+            yellow: {
+                bg: 'linear-gradient(180deg, #fde047 0%, #fbbf24 30%, #fde047 60%, #fbbf24 100%)',
+                border: '#fde68a',
+                text: '#1a1a2e',
+                energy: '#fbbf24',
+                emoji: '⚡'
+            },
+            red: {
+                bg: 'linear-gradient(180deg, #fca5a5 0%, #ef4444 30%, #fca5a5 60%, #ef4444 100%)',
+                border: '#fca5a5',
+                text: '#1a1a2e',
+                energy: '#ef4444',
+                emoji: '🔥'
+            },
+            blue: {
+                bg: 'linear-gradient(180deg, #93c5fd 0%, #3b82f6 30%, #93c5fd 60%, #3b82f6 100%)',
+                border: '#93c5fd',
+                text: '#1a1a2e',
+                energy: '#3b82f6',
+                emoji: '💧'
+            },
+            green: {
+                bg: 'linear-gradient(180deg, #86efac 0%, #22c55e 30%, #86efac 60%, #22c55e 100%)',
+                border: '#86efac',
+                text: '#1a1a2e',
+                energy: '#22c55e',
+                emoji: '🌿'
+            },
+            purple: {
+                bg: 'linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 30%, #c4b5fd 60%, #8b5cf6 100%)',
+                border: '#c4b5fd',
+                text: '#1a1a2e',
+                energy: '#8b5cf6',
+                emoji: '🔮'
+            },
+            pink: {
+                bg: 'linear-gradient(180deg, #fbcfe8 0%, #ec4899 30%, #fbcfe8 60%, #ec4899 100%)',
+                border: '#fbcfe8',
+                text: '#1a1a2e',
+                energy: '#ec4899',
+                emoji: '🌸'
+            }
+        };
+
+        // ランダムにカードを1枚選んでHTMLに反映する
+        function renderRandomCard() {
+            const card = CARD_DATA[Math.floor(Math.random() * CARD_DATA.length)];
+            const style = TYPE_STYLES[card.type] || TYPE_STYLES.yellow;
+
+            // CSS変数でタイプカラーを適用
+            const front = document.getElementById('card-front');
+            front.style.setProperty('--card-bg', style.bg);
+            front.style.setProperty('--card-border', style.border);
+            front.style.setProperty('--card-text', style.text);
+            front.style.setProperty('--card-energy', style.energy);
+
+            // テキスト内容を更新
+            document.getElementById('card-band-name').textContent = card.band;
+            document.getElementById('card-slot').textContent = card.slot;
+            document.getElementById('card-time').textContent = card.time;
+            document.getElementById('card-image').src = card.img;
+            document.getElementById('card-image').alt = card.band + ' 写真';
+            document.getElementById('card-message').textContent = card.msg;
+            document.getElementById('card-since').textContent = card.since;
+
+            // エネルギーアイコンをタイプに合わせる
+            const energyEl = document.getElementById('card-energy-1');
+            energyEl.style.background = style.energy;
+            energyEl.textContent = style.emoji;
+        }
+
+        // 画面サイズに応じてカードを等比率でスケーリング（全デバイス共通）
+        function adjustCardScale() {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const cardWidth = 300;  // カード固定幅
+            const cardHeight = 420; // カード固定高さ
+            const paddingX = 40;    // 左右余白
+            const extraSpaceY = 140; // ヒントテキスト + ボタン + 上下余白
+
+            // 横幅ベースのスケールと縦幅ベースのスケールの小さい方を採用
+            const scaleX = (vw - paddingX) / cardWidth;
+            const scaleY = (vh - extraSpaceY) / cardHeight;
+            const scale = Math.min(scaleX, scaleY, 1.2); // 最大。1.2倍まで
+
+            document.documentElement.style.setProperty('--card-scale', scale.toFixed(3));
+
+            // scaleで見た目は縮むがDOM上の占有スペースは元のまま
+            // → ラッパーの高さを実際の見た目に合わせて修正
+            const wrapper = document.getElementById('card-scale-wrapper');
+            if (wrapper) {
+                wrapper.style.height = (cardHeight * scale) + 'px';
+                wrapper.style.width = (cardWidth * scale) + 'px';
+            }
+        }
+
+        // 画面リサイズ時にも再計算
+        window.addEventListener('resize', adjustCardScale);
+
+        // 区分ボタンがクリックされた時の処理（対応するフィールドを展開/非表示）
+        function toggleCategory(value) {
+            const fieldsCurrent = document.getElementById('fields-current');
+            const fieldsObog = document.getElementById('fields-obog');
+
+            // 全フィールドを非表示にし、requiredを解除
+            fieldsCurrent.classList.add('hidden');
+            fieldsObog.classList.add('hidden');
+            fieldsCurrent.querySelectorAll('input').forEach(el => { el.required = false; });
+            fieldsObog.querySelectorAll('input').forEach(el => { el.required = false; });
+
+            if (value === 'current') {
+                // アメ研現役: フィールドを展開しrequiredを付与
+                fieldsCurrent.classList.remove('hidden');
+                fieldsCurrent.querySelectorAll('input').forEach(el => { el.required = true; });
+            } else if (value === 'obog') {
+                // OB・OG: フィールドを展開しrequiredを付与
+                fieldsObog.classList.remove('hidden');
+                fieldsObog.querySelectorAll('input').forEach(el => { el.required = true; });
+            }
+            // 「それ以外の方」は何もしない
+        }
+
+        // フォームが送信された時の処理
+        document.getElementById('reception-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // 選択された区分を取得
+            const affiliation = document.querySelector('input[name="affiliation"]:checked').value;
+            const affiliationLabels = { current: 'アメ研現役', obog: 'OB・OG', other: 'その他' };
+
+            // 区分に応じた正しいフィールドからデータを取得
+            let generation = '';
+            let name = '';
+            if (affiliation === 'current') {
+                generation = document.getElementById('gen-current').value;
+                name = document.getElementById('name-current').value;
+            } else if (affiliation === 'obog') {
+                generation = document.getElementById('gen-obog').value;
+                name = document.getElementById('name-obog').value;
+            }
+
+            const savedData = {
+                affiliation: affiliation,
+                generation: generation,
+                name: name
+            };
+
+            // localStorageに回答済みフラグとデータを保存
+            localStorage.setItem('formSubmitted', 'true');
+            localStorage.setItem('formData', JSON.stringify(savedData));
+
+            // バックエンド（Googleスプレッドシート）へ非同期送信（UIはブロックしない）
+            const backendData = { ...savedData, affiliation: affiliationLabels[affiliation] || affiliation };
+            submitToBackend(backendData);
+
+            const formContainer = document.getElementById('form-glass-container');
+            const packContainer = document.getElementById('pack-opening-container');
+            const tapHint = document.getElementById('tap-hint');
+
+            // カードデータをランダム選択して描画
+            renderRandomCard();
+
+            // スマホ向けスケール計算
+            adjustCardScale();
+
+            // 1. フォーム全体をフェードアウト
+            formContainer.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+
+            setTimeout(() => {
+                formContainer.style.display = 'none';
+
+                // 2. カードコンテナを表示
+                packContainer.classList.remove('hidden');
+
+                // 3. 少し遅れて「タップしてね」のヒントを表示
+                setTimeout(() => {
+                    tapHint.classList.remove('opacity-0');
+                }, 800);
+            }, 500);
+        });
+
+        // カードの回転角度を管理（常に+180で時計回り）
+        let cardRotation = 0;
+
+        // カードがクリック/タップされた時の処理（トグル式、内容は変えない）
+        function flipCard() {
+            const tcgCard = document.getElementById('tcg-card');
+            const cardInner = document.getElementById('card-inner');
+            const tapHint = document.getElementById('tap-hint');
+            const enterBtn = document.getElementById('enter-site-btn');
+
+            // アニメーション中の連打を防止
+            if (tcgCard.dataset.animating === 'true') return;
+            tcgCard.dataset.animating = 'true';
+
+            // 常に時計回りに+180度回転
+            cardRotation += 180;
+            const isShowingFront = (cardRotation / 180) % 2 === 1;
+
+            // 浮遊アニメーションを止める
+            tcgCard.classList.remove('animate-card-float');
+
+            // 回転を適用
+            cardInner.style.transform = `rotateY(${cardRotation}deg)`;
+
+            if (isShowingFront) {
+                // 裏→表: エフェクト発動
+                tcgCard.classList.add('flipped');
+                tapHint.classList.add('opacity-0');
+
+                // 回転完了後に入場ボタン表示
+                setTimeout(() => {
+                    enterBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                    enterBtn.classList.add('opacity-100', 'translate-y-0');
+                    tcgCard.dataset.animating = 'false';
+                }, 1200);
+            } else {
+                // 表→裏: エフェクト解除（カード内容はそのまま変えない）
+                tcgCard.classList.remove('flipped');
+
+                setTimeout(() => {
+                    tcgCard.dataset.animating = 'false';
+                }, 1000);
+            }
+        }
+
+        // 「入場する」ボタンが押された時の処理（メインコンテンツへ遷移）
+        function enterSite() {
+            const overlay = document.getElementById('reception-overlay');
+            const mainContent = document.getElementById('main-content');
+
+            // オーバーレイ全体をフェードアウト
+            overlay.classList.add('animate-fade-out');
+
+            // アニメーション完了後にDOMから非表示
+            setTimeout(() => {
+                overlay.style.display = 'none';
+
+                // メインコンテンツを表示
+                mainContent.classList.remove('h-screen', 'overflow-hidden', 'opacity-0');
+                mainContent.classList.add('opacity-100');
+
+                // トップへスクロール
+                window.scrollTo(0, 0);
+            }, 500);
+        }
+
+        // 「もう一度カードを引く」ボタンの処理
+        function replayCardAnimation() {
+            const overlay = document.getElementById('reception-overlay');
+            const mainContent = document.getElementById('main-content');
+            const formContainer = document.getElementById('form-glass-container');
+            const packContainer = document.getElementById('pack-opening-container');
+            const tapHint = document.getElementById('tap-hint');
+            const cardInner = document.getElementById('card-inner');
+            const tcgCard = document.getElementById('tcg-card');
+            const enterBtn = document.getElementById('enter-site-btn');
+
+            // カードの状態をリセット（裏面に戻す）
+            cardRotation = 0;
+            cardInner.style.transform = 'rotateY(0deg)';
+            tcgCard.classList.remove('flipped');
+            tcgCard.classList.add('animate-card-float');
+            tcgCard.dataset.animating = 'false';
+
+            // ボタンを非表示に戻す
+            enterBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            enterBtn.classList.remove('opacity-100', 'translate-y-0');
+
+            // 新しいカードをランダム選択
+            renderRandomCard();
+            adjustCardScale();
+
+            // フォームは非表示のまま、カード演出コンテナを表示
+            formContainer.style.display = 'none';
+            packContainer.classList.remove('hidden');
+
+            // メインコンテンツを隠す
+            mainContent.classList.add('h-screen', 'overflow-hidden', 'opacity-0');
+            mainContent.classList.remove('opacity-100');
+
+            // オーバーレイを再表示
+            overlay.style.display = '';
+            overlay.classList.remove('animate-fade-out');
+
+            // ヒントを表示
+            setTimeout(() => {
+                tapHint.classList.remove('opacity-0');
+            }, 500);
+        }
+
+        // ===== ページ読み込み時: localStorageをチェックして回答済みならスキップ =====
+        (function checkAlreadySubmitted() {
+            if (localStorage.getItem('formSubmitted') === 'true') {
+                // 回答済み: フォームとカード演出をスキップしてメインコンテンツを即表示
+                const overlay = document.getElementById('reception-overlay');
+                const mainContent = document.getElementById('main-content');
+
+                overlay.style.display = 'none';
+                mainContent.classList.remove('h-screen', 'overflow-hidden', 'opacity-0');
+                mainContent.classList.add('opacity-100');
+            }
+        })();
+    </script>
+</body>
+
+</html>
