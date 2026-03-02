@@ -489,9 +489,9 @@
         <!-- フォーム送信後に表示されるカード抽出演出コンテナ (初期非表示) -->
         <div id="pack-opening-container" class="hidden absolute inset-0 z-20 overflow-y-auto">
             <!-- 内側ラッパー: 全画面中央配置用 -->
-            <div class="min-h-full w-full flex flex-col items-center justify-center px-4 py-6">
+            <div class="min-h-full w-full flex flex-col items-center justify-center px-4 py-2">
                 <p id="tap-hint"
-                    class="text-star-accent font-display font-bold tracking-widest text-2xl animate-pulse text-glow opacity-0 transition-opacity duration-1000 mb-4">
+                    class="text-star-accent font-display font-bold tracking-widest text-2xl animate-pulse text-glow opacity-0 transition-opacity duration-1000 mb-1">
                     Tap!!</p>
 
                 <!-- scale用ラッパー: スマホではこの要素がscale()で縮小される -->
@@ -576,7 +576,7 @@
 
                 <!-- 演出完了後の入場ボタン (初期非表示) -->
                 <button id="enter-site-btn" onclick="enterSite()"
-                    class="opacity-0 pointer-events-none translate-y-4 transition-all duration-700 mt-4 w-3/4 max-w-xs bg-space-900 text-white border border-star-accent font-bold text-base py-3 rounded-full hover:bg-star-accent hover:text-space-900 shadow-[0_0_15px_rgba(255,184,0,0.4)] relative z-30">
+                    class="opacity-0 pointer-events-none translate-y-4 transition-all duration-700 mt-6 w-3/4 max-w-xs bg-space-900 text-white border border-star-accent font-bold text-base py-3 rounded-full hover:bg-star-accent hover:text-space-900 shadow-[0_0_15px_rgba(255,184,0,0.4)] relative z-30">
                     入場する
                 </button>
             </div>
