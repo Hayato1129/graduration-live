@@ -81,12 +81,14 @@
 
         .bg-stars {
             background-image:
-                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
-                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
-                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0, 0, 0, 0)),
-                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0, 0, 0, 0)),
-                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
-                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0, 0, 0, 0));
+                /* 近い星（大きくて明るい） */
+                radial-gradient(3px 3px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+                /* 中くらいの星 */
+                radial-gradient(2px 2px at 130px 80px, #ddd, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 70px 150px, #eee, rgba(0, 0, 0, 0)),
+                /* 遠い星（小さくて暗い） */
+                radial-gradient(1px 1px at 160px 120px, #bbb, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 50px 60px, #999, rgba(0, 0, 0, 0));
             background-repeat: repeat;
             background-size: 200px 200px;
         }
@@ -156,11 +158,193 @@
             transform: scale(var(--card-scale, 1));
             transform-origin: top center;
         }
+
+        /* ===== 流れ星キャラクターエフェクト ===== */
+        .shooting-star-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .shooting-star {
+            position: absolute;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 8px rgba(255, 230, 100, 0.8)) drop-shadow(0 0 20px rgba(255, 184, 0, 0.4));
+            animation: shootingStar var(--duration, 3s) linear forwards;
+        }
+
+        /* 流れ星の尾（移動方向の後方＝右側に伸びる） */
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, rgba(255, 230, 100, 0.8), transparent);
+            border-radius: 2px;
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translate(0, 0) rotate(15deg) scale(1);
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(-100vw - 200px), calc(-60vh)) rotate(15deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 53代君用: 左から右上へ飛ぶアニメーション */
+        .shooting-star-right {
+            position: absolute;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 8px rgba(255, 230, 100, 0.8)) drop-shadow(0 0 20px rgba(255, 184, 0, 0.4));
+            animation: shootingStarRight var(--duration, 6s) linear forwards;
+        }
+
+        /* 53代君の光跡（移動方向の後方＝左側に伸びる） */
+        .shooting-star-right::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to left, rgba(255, 230, 100, 0.8), transparent);
+            border-radius: 2px;
+        }
+
+        @keyframes shootingStarRight {
+            0% {
+                transform: translate(0, 0) rotate(-15deg) scale(1);
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(100vw + 200px), calc(-60vh)) rotate(-15deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ===== 小さな流れ星（光の粒） ===== */
+        .meteor {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .meteor-left {
+            animation: meteorLeft var(--m-duration, 2.5s) linear forwards;
+        }
+
+        .meteor-right {
+            animation: meteorRight var(--m-duration, 2.5s) linear forwards;
+        }
+
+        /* 光の尾（移動方向の後ろ＝右上側に伸びる） */
+        .meteor-left::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 1.5px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.7), transparent);
+        }
+
+        /* 光の尾（右下方向・未使用だが残す） */
+        .meteor-right::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 1.5px;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.7), transparent);
+        }
+
+        @keyframes meteorLeft {
+            0% {
+                transform: translate(0, 0) rotate(-25deg);
+                opacity: 0;
+            }
+
+            8% {
+                transform: translate(calc(-8vw), calc(4vh)) rotate(-25deg);
+                opacity: 1;
+            }
+
+            60% {
+                transform: translate(calc(-60vw), calc(30vh)) rotate(-25deg);
+                opacity: 0.6;
+            }
+
+            70% {
+                transform: translate(calc(-70vw), calc(35vh)) rotate(-25deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(calc(-70vw), calc(35vh)) rotate(-25deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes meteorRight {
+            0% {
+                transform: translate(0, 0) rotate(25deg);
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(calc(100vw + 100px), calc(50vh)) rotate(25deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body
     class="bg-space-900 bg-stars text-slate-200 font-sans antialiased selection:bg-star-accent selection:text-space-900 relative">
+
+    <!-- 流れ星キャラクターコンテナ -->
+    <div id="shooting-star-container" class="shooting-star-container"></div>
 
     <!-- 全画面受付フォーム (アクセス時に最初に表示される) -->
     <div id="reception-overlay"
@@ -307,8 +491,8 @@
             <!-- 内側ラッパー: 全画面中央配置用 -->
             <div class="min-h-full w-full flex flex-col items-center justify-center px-4 py-6">
                 <p id="tap-hint"
-                    class="text-star-accent font-bold tracking-widest text-sm animate-pulse text-glow opacity-0 transition-opacity duration-1000 mb-4">
-                    タップしてカードをめくる</p>
+                    class="text-star-accent font-display font-bold tracking-widest text-2xl animate-pulse text-glow opacity-0 transition-opacity duration-1000 mb-4">
+                    Tap!!</p>
 
                 <!-- scale用ラッパー: スマホではこの要素がscale()で縮小される -->
                 <div id="card-scale-wrapper" class="flex items-center justify-center">
@@ -519,21 +703,12 @@
 
                 <div class="flex gap-6 mb-12">
                     <!-- Instagram Icon Placeholder -->
-                    <a href="#"
+                    <a href="https://www.instagram.com/55_53_ameken.official/" target="_blank" rel="noopener noreferrer"
                         class="w-12 h-12 rounded-full bg-space-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-star-accent hover:bg-space-700 transition-all duration-300 shadow-sm">
                         <span class="sr-only">Instagram</span>
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                    </a>
-                    <!-- X (Twitter) Icon Placeholder -->
-                    <a href="#"
-                        class="w-12 h-12 rounded-full bg-space-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-star-accent hover:bg-space-700 transition-all duration-300 shadow-sm">
-                        <span class="sr-only">X (Twitter)</span>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
                     </a>
                 </div>
@@ -903,6 +1078,119 @@
                 mainContent.classList.remove('h-screen', 'overflow-hidden', 'opacity-0');
                 mainContent.classList.add('opacity-100');
             }
+        })();
+
+        // ===== 流れ星キャラクターエフェクト（55代君 & 53代君） =====
+        (function initShootingStars() {
+            const container = document.getElementById('shooting-star-container');
+
+            // キャラクター設定
+            const CHARACTERS = [
+                { src: './55代君.png', className: 'shooting-star', startLeft: true },
+                { src: './53代君.png', className: 'shooting-star-right', startLeft: false }
+            ];
+
+            function createShootingStar() {
+                // ランダムにキャラクターを選択
+                const char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+
+                const star = document.createElement('img');
+                star.src = char.src;
+                star.className = char.className;
+
+                // 固定サイズ（100px）
+                star.style.width = '100px';
+                star.style.height = 'auto';
+
+                // トップビジュアル（header）の範囲内に出現を限定
+                const header = document.querySelector('#main-content header');
+                const headerTop = header ? header.offsetTop : 0;
+                const headerHeight = header ? header.offsetHeight : window.innerHeight;
+                star.style.top = (headerTop + headerHeight * (0.1 + Math.random() * 0.7)) + 'px';
+
+                // 55代君: 右から出現 / 53代君: 左から出現
+                if (char.startLeft) {
+                    star.style.left = (100 + Math.random() * 10) + '%';
+                } else {
+                    star.style.left = (-15 - Math.random() * 10) + '%';
+                }
+
+                // 固定のアニメーション時間（6秒）
+                star.style.setProperty('--duration', '6s');
+
+                container.appendChild(star);
+
+                // アニメーション終了後にDOMから削除
+                setTimeout(() => {
+                    star.remove();
+                }, 6100);
+            }
+
+            // ランダムな間隔で流れ星を生成（12～20秒ごと）
+            function scheduleNext() {
+                const delay = 12000 + Math.random() * 8000;
+                setTimeout(() => {
+                    createShootingStar();
+                    scheduleNext();
+                }, delay);
+            }
+
+            // 初回: 7秒後に最初の流れ星を表示
+            setTimeout(() => {
+                createShootingStar();
+                scheduleNext();
+            }, 7000);
+        })();
+
+        // ===== 小さな流れ星（光の粒）エフェクト =====
+        (function initMeteors() {
+            const container = document.getElementById('shooting-star-container');
+
+            function createMeteor() {
+                const dot = document.createElement('div');
+                dot.className = 'meteor meteor-left';
+
+                // サイズ: 2～4px
+                const size = 2 + Math.random() * 2;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+
+                // 色: 白～薄黄色
+                const colors = ['#fff', '#fff', '#FFE382', '#fffbe6'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                dot.style.background = color;
+                dot.style.boxShadow = `0 0 ${size + 2}px ${color}`;
+
+                // トップビジュアル範囲内に出現
+                const header = document.querySelector('#main-content header');
+                const headerTop = header ? header.offsetTop : 0;
+                const headerHeight = header ? header.offsetHeight : window.innerHeight;
+                dot.style.top = (headerTop + headerHeight * (0.05 + Math.random() * 0.5)) + 'px';
+
+                // 右端から出現
+                dot.style.left = (100 + Math.random() * 10) + '%';
+
+                // 速度: 2～3.5秒
+                const duration = 2 + Math.random() * 1.5;
+                dot.style.setProperty('--m-duration', duration + 's');
+
+                container.appendChild(dot);
+                setTimeout(() => dot.remove(), duration * 1000 + 100);
+            }
+
+            function scheduleNext() {
+                const delay = 8000 + Math.random() * 7000;
+                setTimeout(() => {
+                    createMeteor();
+                    scheduleNext();
+                }, delay);
+            }
+
+            // 初回: 5秒後
+            setTimeout(() => {
+                createMeteor();
+                scheduleNext();
+            }, 5000);
         })();
     </script>
 </body>
