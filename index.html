@@ -156,7 +156,7 @@
         /* カード全体を画像のように等比率でスケーリング（PC/スマホ共通） */
         #card-scale-wrapper {
             transform: scale(var(--card-scale, 1));
-            transform-origin: top center;
+            transform-origin: center center;
         }
 
         /* ===== 流れ星キャラクターエフェクト ===== */
@@ -854,21 +854,22 @@
             const cardWidth = 300;  // カード固定幅
             const cardHeight = 420; // カード固定高さ
             const paddingX = 40;    // 左右余白
-            const extraSpaceY = 140; // ヒントテキスト + ボタン + 上下余白
+            // Tap!!(約40px) + 入場するボタン(約56px) + 上下余白(約40px) + gap(約20px)
+            const extraSpaceY = 160;
 
             // 横幅ベースのスケールと縦幅ベースのスケールの小さい方を採用
             const scaleX = (vw - paddingX) / cardWidth;
             const scaleY = (vh - extraSpaceY) / cardHeight;
-            const scale = Math.min(scaleX, scaleY, 1.2); // 最大。1.2倍まで
+            const scale = Math.min(scaleX, scaleY, 1.2); // 最大1.2倍まで
 
             document.documentElement.style.setProperty('--card-scale', scale.toFixed(3));
 
             // scaleで見た目は縮むがDOM上の占有スペースは元のまま
-            // → ラッパーの高さを実際の見た目に合わせて修正
+            // → ラッパーの高さ/幅を実際の見た目に合わせて修正
             const wrapper = document.getElementById('card-scale-wrapper');
             if (wrapper) {
-                wrapper.style.height = (cardHeight * scale) + 'px';
-                wrapper.style.width = (cardWidth * scale) + 'px';
+                wrapper.style.height = Math.floor(cardHeight * scale) + 'px';
+                wrapper.style.width = Math.floor(cardWidth * scale) + 'px';
             }
         }
 
