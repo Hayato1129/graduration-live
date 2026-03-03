@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 卒業ライブ🌟ゴーゴーレツゴーゴゴゴーゴゴーゴ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Outfit:wght@700;900&display=swap"
+        rel="stylesheet">
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        display: ['"Outfit"', '"Noto Sans JP"', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            900: '#0B0D17',
+                            800: '#161A30',
+                            700: '#222831',
+                        },
+                        star: {
+                            glow: '#FFE382',
+                            accent: '#FFB800'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'fade-out': 'fadeOut 0.5s ease-out forwards',
+                        // カード独自の浮遊アニメーション
+                        'card-float': 'cardFloat 4s ease-in-out infinite',
+                        // キラキラアニメーション
+                        'shine': 'shine 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1' },
+                            '100%': { opacity: '0', pointerEvents: 'none' },
+                        },
+                        cardFloat: {
+                            '0%, 100%': { transform: 'translateY(0) rotateX(5deg) rotateY(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotateX(10deg) rotateY(5deg)' },
+                        },
+                        shine: {
+                            '0%, 100%': { opacity: 0.3, transform: 'translateX(-100%) skew(-20deg)' },
+                            '50%': { opacity: 0.8, transform: 'translateX(200%) skew(-20deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 227, 130, 0.5);
+        }
+
+        .bg-stars {
+            background-image:
+                /* 近い星（大きくて明るい） */
+                radial-gradient(3px 3px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+                /* 中くらいの星 */
+                radial-gradient(2px 2px at 130px 80px, #ddd, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 70px 150px, #eee, rgba(0, 0, 0, 0)),
+                /* 遠い星（小さくて暗い） */
+                radial-gradient(1px 1px at 160px 120px, #bbb, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 50px 60px, #999, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+        }
+
+        /* 3D Flip Utilities */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Hologram specific styles */
+        .holo-overlay {
+            background: linear-gradient(125deg,
+                    rgba(255, 0, 0, 0.1) 0%,
+                    rgba(255, 154, 0, 0.2) 10%,
+                    rgba(208, 222, 33, 0.3) 20%,
+                    rgba(79, 220, 74, 0.4) 30%,
+                    rgba(63, 218, 216, 0.3) 40%,
+                    rgba(47, 201, 226, 0.2) 50%,
+                    rgba(28, 127, 238, 0.3) 60%,
+                    rgba(95, 21, 242, 0.4) 70%,
+                    rgba(186, 12, 248, 0.3) 80%,
+                    rgba(251, 7, 217, 0.2) 90%,
+                    rgba(255, 0, 0, 0.1) 100%);
+            mix-blend-mode: color-dodge;
+            opacity: 0.6;
+        }
+
+        /* Custom scrollbar for form */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 184, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 184, 0, 0.8);
+        }
+
+        /* ===== 流れ星キャラクターエフェクト ===== */
+        .shooting-star-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .shooting-star {
+            position: absolute;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 8px rgba(255, 230, 100, 0.8)) drop-shadow(0 0 20px rgba(255, 184, 0, 0.4));
+            animation: shootingStar var(--duration, 3s) linear forwards;
+        }
+
+        /* 流れ星の尾（移動方向の後方＝右側に伸びる） */
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, rgba(255, 230, 100, 0.8), transparent);
+            border-radius: 2px;
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translate(0, 0) rotate(15deg) scale(1);
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(-100vw - 200px), calc(-60vh)) rotate(15deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 53代君用: 左から右上へ飛ぶアニメーション */
+        .shooting-star-right {
+            position: absolute;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 8px rgba(255, 230, 100, 0.8)) drop-shadow(0 0 20px rgba(255, 184, 0, 0.4));
+            animation: shootingStarRight var(--duration, 6s) linear forwards;
+        }
+
+        /* 53代君の光跡（移動方向の後方＝左側に伸びる） */
+        .shooting-star-right::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to left, rgba(255, 230, 100, 0.8), transparent);
+            border-radius: 2px;
+        }
+
+        @keyframes shootingStarRight {
+            0% {
+                transform: translate(0, 0) rotate(-15deg) scale(1);
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(100vw + 200px), calc(-60vh)) rotate(-15deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ===== 小さな流れ星（光の粒） ===== */
+        .meteor {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .meteor-left {
+            animation: meteorLeft var(--m-duration, 2.5s) linear forwards;
+        }
+
+        .meteor-right {
+            animation: meteorRight var(--m-duration, 2.5s) linear forwards;
+        }
+
+        /* 光の尾（移動方向の後ろ＝右上側に伸びる） */
+        .meteor-left::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 1.5px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.7), transparent);
+        }
+
+        /* 光の尾（右下方向・未使用だが残す） */
+        .meteor-right::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 1.5px;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.7), transparent);
+        }
+
+        @keyframes meteorLeft {
+            0% {
+                transform: translate(0, 0) rotate(-25deg);
+                opacity: 0;
+            }
+
+            8% {
+                transform: translate(calc(-8vw), calc(4vh)) rotate(-25deg);
+                opacity: 1;
+            }
+
+            60% {
+                transform: translate(calc(-60vw), calc(30vh)) rotate(-25deg);
+                opacity: 0.6;
+            }
+
+            70% {
+                transform: translate(calc(-70vw), calc(35vh)) rotate(-25deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(calc(-70vw), calc(35vh)) rotate(-25deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes meteorRight {
+            0% {
+                transform: translate(0, 0) rotate(25deg);
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(calc(100vw + 100px), calc(50vh)) rotate(25deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-space-900 bg-stars text-slate-200 font-sans antialiased selection:bg-star-accent selection:text-space-900 relative">
+
+    <!-- 流れ星キャラクターコンテナ -->
+    <div id="shooting-star-container" class="shooting-star-container"></div>
+
+
+    <!-- メインコンテンツ -->
+    <div id="main-content" class="transition-opacity duration-1000 ease-in-out">
+        <!-- 1. トップビジュアル -->
+        <header
+            class="relative min-h-[90vh] flex items-center justify-center flex-col px-4 pt-16 pb-24 overflow-hidden text-center">
+            <!-- Decorative glowing orb -->
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-star-accent/20 rounded-full blur-[80px] pointer-events-none">
+            </div>
+
+            <div class="relative z-10 animate-float">
+                <p class="text-sm md:text-base font-bold text-slate-300 tracking-widest mb-6 leading-relaxed">
+                    ゴーゴーレツゴーゴゴゴーゴゴーゴ<br />
+                    星が通るぜびゅんびゅんびゅん！<br />
+                    目指せみんなの一番星🌟<br />
+                    アメ研と共にあらんことを！！<br />
+                    ファイナルロックスターウォーズ！
+                </p>
+
+                <h1
+                    class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-12 text-glow">
+                    2026年<br class="md:hidden" />卒業ライブ
+                </h1>
+
+                <div
+                    class="glass rounded-2xl p-6 md:p-8 inline-flex flex-col gap-4 border-star-accent/30 shadow-[0_0_30px_rgba(255,184,0,0.1)]">
+                    <div class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6 text-star-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span class="text-xl md:text-2xl font-bold text-white tracking-wider">2026.3.13 - 15</span>
+                    </div>
+                    <div class="h-px bg-gradient-to-r from-transparent via-star-accent/50 to-transparent"></div>
+                    <div class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6 text-star-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-lg md:text-xl font-bold text-white">京都fanJ</span>
+                    </div>
+                </div>
+
+                <div class="mt-16 animate-pulse-slow">
+                    <a href="#movie"
+                        class="text-slate-400 hover:text-star-accent transition-colors duration-300 flex flex-col items-center gap-2">
+                        <span class="text-sm uppercase tracking-widest">Scroll Down</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-4 pb-24 space-y-32">
+
+
+
+            <!-- 2. 紹介動画セクション -->
+            <section id="movie" class="scroll-mt-24">
+                <h2
+                    class="text-3xl font-display font-bold text-center mb-8 text-white flex items-center justify-center gap-4">
+                    <span class="w-12 h-px bg-gradient-to-r from-transparent to-star-accent"></span>
+                    Teaser Movie
+                    <span class="w-12 h-px bg-gradient-to-l from-transparent to-star-accent"></span>
+                </h2>
+                <div class="glass rounded-2xl p-2 md:p-4 relative group">
+                    <div
+                        class="relative pb-[56.25%] h-0 overflow-hidden rounded-xl bg-space-800 border border-slate-700/50">
+                        <iframe class="absolute inset-0 w-full h-full"
+                            src="https://www.youtube-nocookie.com/embed/lXMyUgAZC3Y" title="卒業ライブ Teaser Movie"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. タイムテーブルセクション -->
+            <section id="timetable" class="scroll-mt-24">
+                <h2
+                    class="text-3xl font-display font-bold text-center mb-8 text-white flex items-center justify-center gap-4">
+                    <span class="w-12 h-px bg-gradient-to-r from-transparent to-star-accent"></span>
+                    Time Table
+                    <span class="w-12 h-px bg-gradient-to-l from-transparent to-star-accent"></span>
+                </h2>
+                <div class="glass rounded-2xl p-2 md:p-4">
+                    <img src="./260221_タイムテーブル_卒業ライブ.png" alt="タイムテーブル"
+                        class="w-full rounded-xl border border-slate-700/50">
+                </div>
+            </section>
+
+
+        </main>
+
+        <!-- 6. フッター -->
+        <footer class="bg-space-900 border-t border-slate-800 pt-16 pb-8">
+            <div class="max-w-4xl mx-auto px-4 flex flex-col items-center">
+
+                <h3 class="font-display font-bold text-xl mb-8 tracking-widest text-white text-center">FINAL ROCK STAR
+                    WARS<br><span class="text-sm text-star-accent">2026.3.13-15</span></h3>
+
+                <div class="flex gap-6 mb-12">
+                    <!-- Instagram Icon Placeholder -->
+                    <a href="https://www.instagram.com/55_53_ameken.official/" target="_blank" rel="noopener noreferrer"
+                        class="w-12 h-12 rounded-full bg-space-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-star-accent hover:bg-space-700 transition-all duration-300 shadow-sm">
+                        <span class="sr-only">Instagram</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-500">&copy; 2026 卒業ライブ実行委員会 All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- UI制御用JavaScript -->
+    <script>
+
+            // ===== 流れ星キャラクターエフェクト（55代君 & 53代君） =====
+            (function initShootingStars() {
+                const container = document.getElementById('shooting-star-container');
+
+                // キャラクター設定
+                const CHARACTERS = [
+                    { src: './55代君.png', className: 'shooting-star', startLeft: true },
+                    { src: './53代君.png', className: 'shooting-star-right', startLeft: false }
+                ];
+
+                function createShootingStar() {
+                    // ランダムにキャラクターを選択
+                    const char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+
+                    const star = document.createElement('img');
+                    star.src = char.src;
+                    star.className = char.className;
+
+                    // 固定サイズ（100px）
+                    star.style.width = '100px';
+                    star.style.height = 'auto';
+
+                    // トップビジュアル（header）の範囲内に出現を限定
+                    const header = document.querySelector('#main-content header');
+                    const headerTop = header ? header.offsetTop : 0;
+                    const headerHeight = header ? header.offsetHeight : window.innerHeight;
+                    star.style.top = (headerTop + headerHeight * (0.1 + Math.random() * 0.7)) + 'px';
+
+                    // 55代君: 右から出現 / 53代君: 左から出現
+                    if (char.startLeft) {
+                        star.style.left = (100 + Math.random() * 10) + '%';
+                    } else {
+                        star.style.left = (-15 - Math.random() * 10) + '%';
+                    }
+
+                    // 固定のアニメーション時間（6秒）
+                    star.style.setProperty('--duration', '6s');
+
+                    container.appendChild(star);
+
+                    // アニメーション終了後にDOMから削除
+                    setTimeout(() => {
+                        star.remove();
+                    }, 6100);
+                }
+
+                // ランダムな間隔で流れ星を生成（12～20秒ごと）
+                function scheduleNext() {
+                    const delay = 12000 + Math.random() * 8000;
+                    setTimeout(() => {
+                        createShootingStar();
+                        scheduleNext();
+                    }, delay);
+                }
+
+                // 初回: 7秒後に最初の流れ星を表示
+                setTimeout(() => {
+                    createShootingStar();
+                    scheduleNext();
+                }, 7000);
+            })();
+
+        // ===== 小さな流れ星（光の粒）エフェクト =====
+        (function initMeteors() {
+            const container = document.getElementById('shooting-star-container');
+
+            function createMeteor() {
+                const dot = document.createElement('div');
+                dot.className = 'meteor meteor-left';
+
+                // サイズ: 2～4px
+                const size = 2 + Math.random() * 2;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+
+                // 色: 白～薄黄色
+                const colors = ['#fff', '#fff', '#FFE382', '#fffbe6'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                dot.style.background = color;
+                dot.style.boxShadow = `0 0 ${size + 2}px ${color}`;
+
+                // トップビジュアル範囲内に出現
+                const header = document.querySelector('#main-content header');
+                const headerTop = header ? header.offsetTop : 0;
+                const headerHeight = header ? header.offsetHeight : window.innerHeight;
+                dot.style.top = (headerTop + headerHeight * (0.05 + Math.random() * 0.5)) + 'px';
+
+                // 右端から出現
+                dot.style.left = (100 + Math.random() * 10) + '%';
+
+                // 速度: 2～3.5秒
+                const duration = 2 + Math.random() * 1.5;
+                dot.style.setProperty('--m-duration', duration + 's');
+
+                container.appendChild(dot);
+                setTimeout(() => dot.remove(), duration * 1000 + 100);
+            }
+
+            function scheduleNext() {
+                const delay = 8000 + Math.random() * 7000;
+                setTimeout(() => {
+                    createMeteor();
+                    scheduleNext();
+                }, delay);
+            }
+
+            // 初回: 5秒後
+            setTimeout(() => {
+                createMeteor();
+                scheduleNext();
+            }, 5000);
+        })();
+    </script>
+</body>
+
+</html>
